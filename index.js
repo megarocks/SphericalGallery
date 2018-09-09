@@ -13,14 +13,29 @@ import {
 export default class SphericalGallery extends React.Component {
 
 
+  state = {
+    currentSceneImage: 'IMG_2510.JPG'
+  }
+
   sceneImages = [
     'IMG_2510.JPG',
     'IMG_2137.JPG',
-    'IMG_2116.JPG'
+    'IMG_2116.JPG',
+    'goverla_falls.JPG'
   ]
 
   setSceneBackground = sceneImg => {
+    this.setState({
+      currentSceneImage: sceneImg
+    })
     Environment.setBackgroundImage(asset(sceneImg))
+  }
+
+  getButtonStyle = sceneImg => {
+    if (sceneImg === this.state.currentSceneImage)
+      return styles.sceneButtonActive
+    else
+      return styles.sceneButton
   }
 
   render() {
@@ -28,7 +43,7 @@ export default class SphericalGallery extends React.Component {
       <View style={styles.panel}>
         <View style={styles.subPanel}>
           {this.sceneImages.map(sceneImage => (
-            <VrButton style={styles.sceneButton} onClick={() => {
+            <VrButton key={sceneImage} style={this.getButtonStyle(sceneImage)} onClick={() => {
               this.setSceneBackground(sceneImage)
             }}>
               <Image style={styles.sceneImage} source={asset(sceneImage)}/>
@@ -39,6 +54,21 @@ export default class SphericalGallery extends React.Component {
     );
   }
 };
+
+
+const sceneButton = {
+  width: 75,
+  height: 75,
+  backgroundColor: 'blue',
+  marginLeft: 10,
+  marginRight: 10,
+};
+
+const sceneButtonActive = {
+  ...sceneButton,
+  borderWidth: 5,
+  borderColor: 'yellow',
+}
 
 const styles = StyleSheet.create({
   panel: {
@@ -56,16 +86,10 @@ const styles = StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  sceneButton: {
-    width: 75,
-    height: 75,
-    backgroundColor: 'blue',
-    marginLeft: 10,
-    marginRight: 10
-  },
+  sceneButton,
+  sceneButtonActive,
   sceneImage: {
-    width: 75,
-    height: 75
+    flexGrow: 1
   }
 });
 
